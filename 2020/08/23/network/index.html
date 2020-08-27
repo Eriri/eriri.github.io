@@ -46,14 +46,14 @@
   };
 </script>
 
-  <meta name="description" content="|2byte(sorce_port)|2byte(target_port)||4byte(seq)||4byte(ack)||u">
+  <meta name="description" content="TCP三次握手    client  server    listen  listen   synsent ——syn&#x3D;1,seq&#x3D;x——&gt;      synrecd    &lt;——syn&#x3D;1,seq&#x3D;x,ack&#x3D;x+1——    estab      ——seq&#x3D;x+1,ack&#x3D;y+1——&gt;      estab   SYN泛洪攻击  服务器在收到SYN后分配资源,收不到ACK保">
 <meta property="og:type" content="article">
 <meta property="og:title" content="network">
 <meta property="og:url" content="http://yoursite.com/2020/08/23/network/index.html">
 <meta property="og:site_name" content="PSR B1919+21">
-<meta property="og:description" content="|2byte(sorce_port)|2byte(target_port)||4byte(seq)||4byte(ack)||u">
+<meta property="og:description" content="TCP三次握手    client  server    listen  listen   synsent ——syn&#x3D;1,seq&#x3D;x——&gt;      synrecd    &lt;——syn&#x3D;1,seq&#x3D;x,ack&#x3D;x+1——    estab      ——seq&#x3D;x+1,ack&#x3D;y+1——&gt;      estab   SYN泛洪攻击  服务器在收到SYN后分配资源,收不到ACK保">
 <meta property="article:published_time" content="2020-08-23T11:35:48.000Z">
-<meta property="article:modified_time" content="2020-08-25T12:00:18.253Z">
+<meta property="article:modified_time" content="2020-08-27T02:36:11.135Z">
 <meta property="article:author" content="iakwal">
 <meta name="twitter:card" content="summary">
 
@@ -198,7 +198,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-25 20:00:18" itemprop="dateModified" datetime="2020-08-25T20:00:18+08:00">2020-08-25</time>
+                <time title="Modified: 2020-08-27 10:36:11" itemprop="dateModified" datetime="2020-08-27T10:36:11+08:00">2020-08-27</time>
               </span>
 
           
@@ -212,7 +212,162 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>|2byte(sorce_port)|2byte(target_port)|<br>|4byte(seq)|<br>|4byte(ack)|<br>|u</p>
+        <h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><p><strong>三次握手</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">client</th>
+<th align="center"></th>
+<th align="center">server</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">listen</td>
+<td align="center"></td>
+<td align="center">listen</td>
+</tr>
+<tr>
+<td align="center">synsent</td>
+<td align="center">——syn=1,seq=x——&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">synrecd</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">&lt;——syn=1,seq=x,ack=x+1——</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">estab</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">——seq=x+1,ack=y+1——&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">estab</td>
+</tr>
+</tbody></table>
+<p><strong>SYN泛洪攻击</strong></p>
+<ul>
+<li>服务器在收到SYN后分配资源,收不到ACK保持半开通连线</li>
+<li>降低SYN timeout</li>
+<li>设置SYN cookie</li>
+<li>限制一段时间内同一IP的请求数量</li>
+</ul>
+<p><strong>四次挥手</strong><br>|    client     |                       |   server   |<br>| :———–: | :——————-: | :——–: |<br>|     estab     |   ——fin=1,seq=x——&gt;    |   estab    |<br>|  fin_wait_1   |                       | close_wait |<br>|               |     &lt;——ack=x+1——      |            |<br>|  fin_wait_2   | &lt;——send remain data—— |            |<br>|               |   &lt;——fin=1,seq=y——    |  last_ack  |<br>|   time_wait   |     ——ack=y+1——&gt;      |            |<br>| closed(2*MSL) |                       |   closed   |</p>
+<p><strong>close_wait</strong></p>
+<ul>
+<li>被动关闭的一方收到FIN包后回复ACK,进入CLOSE_WAIT</li>
+<li>关闭对应socket</li>
+</ul>
+<p><strong>time_wait</strong></p>
+<ul>
+<li>主动关闭的一方收到FIN包后回复ACK,进入TIME_WAIT</li>
+<li>等待2MSL时间后进入CLOSED</li>
+<li>防止前一个连接延迟或者丢失重传的数据包被后面的连接复用</li>
+<li>确保连接方能在时间范围内关闭自己的连接</li>
+</ul>
+<p><strong>keepalive</strong></p>
+<ul>
+<li>启动一个计时器,到达0之后发出TCP探测包</li>
+<li>纯ACK包Seq号与上一个包重复</li>
+<li>探测连接的对端是否存活</li>
+<li>防止中间设备因超时删除连接相关的连接表</li>
+</ul>
+<p><strong>可靠性</strong></p>
+<ul>
+<li>超时重传:RTT</li>
+<li>最大消息长度:约定发送单位的最大长度</li>
+<li>滑动窗口:包乱序</li>
+</ul>
+<p><strong>拥塞控制</strong></p>
+<ul>
+<li>慢启动:窗口大小随RTT指数级增长</li>
+<li>慢启动门限:窗口大小加法增加</li>
+<li>网络拥塞:重传定时器超时,重新回到慢启动</li>
+<li>快速重传:连续收到3个或以上的dup ACK判断报文丢失</li>
+<li>快速恢复:恢复到门限</li>
+</ul>
+<h1 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h1><p>通过网络地址来定位MAC地址</p>
+<h1 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h1><p><strong>keepalive</strong></p>
+<ul>
+<li>TCP连接复用</li>
+<li>同一个连接上串行方式传递请求-响应数据</li>
+</ul>
+<h1 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h1><table>
+<thead>
+<tr>
+<th align="center">客户端</th>
+<th align="center"></th>
+<th align="center">服务端</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">发起请求</td>
+<td align="center">——TLS版本,加密算法,随机数1——&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">&lt;——TLS版本,加密算法,随机数2,证书——</td>
+<td align="center">响应</td>
+</tr>
+<tr>
+<td align="center">验证证书</td>
+<td align="center">颁发机构,过期时间,吊销</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">解密(签名,公钥)=?=哈希(公钥)</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">——加密(随机数3,公钥),客户端证书——&gt;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">对话密钥</td>
+<td align="center">随机数1+随机数2+随机数3</td>
+<td align="center">对话密钥</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">数据传输</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">威胁</th>
+<th align="left">解决</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">信息窃听</td>
+<td align="left">信息加密:RSA,DH</td>
+</tr>
+<tr>
+<td align="center">信息篡改</td>
+<td align="left">完整性验证:  MAC</td>
+</tr>
+<tr>
+<td align="center">信息劫持</td>
+<td align="left">身份验证:CA</td>
+</tr>
+</tbody></table>
 
     </div>
 
@@ -294,6 +449,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP"><span class="nav-number">1.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ARP"><span class="nav-number">2.</span> <span class="nav-text">ARP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP"><span class="nav-number">3.</span> <span class="nav-text">HTTP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTPS"><span class="nav-number">4.</span> <span class="nav-text">HTTPS</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -309,7 +465,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -46,12 +46,14 @@
   };
 </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="关键字const  const T* 指向常量的指 T* const 常量指针 const T&amp; 常量引用,避免拷贝与修改 修饰成员函数,使其无法修改成员变量  static  静态成员变量:存储在全局数据区,类的所有对象所共有,只能在类体外初始化 静态成员函数:不具有this指针,仅可访问静态成员变量与静态成员函数 静态全局变量:存储在全局数据区,文件内可见的,文件外不可见 静态局部变量">
+<meta property="og:type" content="article">
 <meta property="og:title" content="cplusplus">
 <meta property="og:url" content="http://yoursite.com/2020/08/25/cplusplus/index.html">
 <meta property="og:site_name" content="PSR B1919+21">
+<meta property="og:description" content="关键字const  const T* 指向常量的指 T* const 常量指针 const T&amp; 常量引用,避免拷贝与修改 修饰成员函数,使其无法修改成员变量  static  静态成员变量:存储在全局数据区,类的所有对象所共有,只能在类体外初始化 静态成员函数:不具有this指针,仅可访问静态成员变量与静态成员函数 静态全局变量:存储在全局数据区,文件内可见的,文件外不可见 静态局部变量">
 <meta property="article:published_time" content="2020-08-25T12:01:36.000Z">
-<meta property="article:modified_time" content="2020-08-25T12:01:36.194Z">
+<meta property="article:modified_time" content="2020-08-27T02:56:50.534Z">
 <meta property="article:author" content="iakwal">
 <meta name="twitter:card" content="summary">
 
@@ -191,6 +193,13 @@
 
               <time title="Created: 2020-08-25 20:01:36" itemprop="dateCreated datePublished" datetime="2020-08-25T20:01:36+08:00">2020-08-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-27 10:56:50" itemprop="dateModified" datetime="2020-08-27T10:56:50+08:00">2020-08-27</time>
+              </span>
 
           
 
@@ -203,7 +212,120 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h1><p><strong>const</strong></p>
+<ul>
+<li>const T* 指向常量的指</li>
+<li>T* const 常量指针</li>
+<li>const T&amp; 常量引用,避免拷贝与修改</li>
+<li>修饰成员函数,使其无法修改成员变量</li>
+</ul>
+<p><strong>static</strong></p>
+<ul>
+<li>静态成员变量:存储在全局数据区,类的所有对象所共有,只能在类体外初始化</li>
+<li>静态成员函数:不具有this指针,仅可访问静态成员变量与静态成员函数</li>
+<li>静态全局变量:存储在全局数据区,文件内可见的,文件外不可见</li>
+<li>静态局部变量:存储在全局数据区,定义它的函数或语句块结束时,其作用域结束</li>
+<li>静态函数:文件内可见的,文件外不可见</li>
+</ul>
+<p><strong>inline</strong></p>
+<ul>
+<li>消除函数调用</li>
+<li>不需要寄存器来传递参数</li>
+</ul>
+<p><strong>volatile</strong></p>
+<ul>
+<li>不允许被优化,与内存进行交互,防止不可控因素导致变化</li>
+</ul>
+<p><strong>explicit</strong></p>
+<ul>
+<li>防止隐式转换,复制初始化</li>
+</ul>
+<h1 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h1><h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><ul>
+<li>覆盖<ul>
+<li>虚函数:允许基类指针调用子类函数<ul>
+<li>纯虚函数:必须实现的接口</li>
+<li>虚函数表:生成类对象自动的将类对象前4/8个字节(vptr)设置为虚函数表的地址,类的所有对象共享虚函数表,保存在.data段</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>重载(同名函数):编译时将相同函数名按照一定的格式改变成可以区分</li>
+</ul>
+<h1 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h1><p>brk,sbrk</p>
+<ul>
+<li>program break进程堆末尾地址,sbrk函数移动program break</li>
+<li>是否立即归还给系统受M_TRIM_THRESHOLD,高地址端内存释放</li>
+</ul>
+<p>mmap</p>
+<ul>
+<li>页对齐</li>
+<li>munmap后会立即返回给系统</li>
+</ul>
+<h1 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h1><ul>
+<li>static_cast:良性转换,</li>
+<li>dynamic_cast:基类对象指针（或引用）cast到继承类指针,下行安全</li>
+<li>const_cast:去掉表达式const或volatile</li>
+<li>reinterpret_cast:二进制位重新解释</li>
+</ul>
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><ul>
+<li>互斥锁</li>
+<li>条件锁:满足信号量,唤醒一个因为该条件而被阻塞的线程</li>
+<li>自旋锁</li>
+<li>读写锁</li>
+<li>递归锁</li>
+</ul>
+<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><p><strong>对齐</strong></p>
+<ul>
+<li>struct:每个数据成员存储的起始位置是自身大小的整数倍,结构体总大小是该结构体成员中最大的对齐模数的整数倍</li>
+<li>union:最大长度的成员与类型长度最大的成员共同决定</li>
+</ul>
+<p><strong>内存分布</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">memory layout</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">os kernel</td>
+</tr>
+<tr>
+<td align="center">stack</td>
+</tr>
+<tr>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">heap(链表)</td>
+</tr>
+<tr>
+<td align="center">bss(未初始化的全局变量)</td>
+</tr>
+<tr>
+<td align="center">data(非运行时确定的数据)</td>
+</tr>
+<tr>
+<td align="center">code</td>
+</tr>
+<tr>
+<td align="center">bios</td>
+</tr>
+</tbody></table>
+<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><ul>
+<li>单一职责原则:有且仅有一个原因引起类的变更</li>
+<li>里氏替换原则:子类完美替换基类</li>
+<li>依赖倒置原则:高层模块不应该依赖底层模块，二者都该依赖其抽象；抽象不应该依赖细节；细节应该依赖抽象</li>
+<li>接口隔离原则:类间的依赖关系应该建立在最小的接口上</li>
+<li>迪米特法则:类间解耦</li>
+<li>开放封闭原则:尽量通过扩展软件实体来解决需求变化</li>
+</ul>
+
     </div>
 
     
@@ -222,8 +344,8 @@
       <i class="fa fa-chevron-left"></i> system
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/08/25/mysql/" rel="next" title="mysql">
-      mysql <i class="fa fa-chevron-right"></i>
+    <a href="/2020/08/25/database/" rel="next" title="database">
+      database <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -284,6 +406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键字"><span class="nav-number">1.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象"><span class="nav-number">2.</span> <span class="nav-text">面向对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多态"><span class="nav-number">2.1.</span> <span class="nav-text">多态</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存分配"><span class="nav-number">3.</span> <span class="nav-text">内存分配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-number">4.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#锁"><span class="nav-number">5.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#杂项"><span class="nav-number">6.</span> <span class="nav-text">杂项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计模式"><span class="nav-number">7.</span> <span class="nav-text">设计模式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -299,7 +422,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -46,16 +46,18 @@
   };
 </script>
 
-  <meta property="og:type" content="article">
-<meta property="og:title" content="mysql">
-<meta property="og:url" content="http://yoursite.com/2020/08/25/mysql/index.html">
+  <meta name="description" content="MYSQLinnodb引擎  提供事物ACID  A原子性:undo log C一致性:保证状态转移有效     I隔离性:锁机制,mvcc D持久性:redo log   隔离机制    级别 脏读 不可重复读 幻读    读未提交 o o o   读提交 x o o   可重复读 x x o   序列化 x x x   数据读取问题  脏读:读取未提交事务修改过的数据 不可重复读:前后多次读取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="database">
+<meta property="og:url" content="http://yoursite.com/2020/08/25/database/index.html">
 <meta property="og:site_name" content="PSR B1919+21">
+<meta property="og:description" content="MYSQLinnodb引擎  提供事物ACID  A原子性:undo log C一致性:保证状态转移有效     I隔离性:锁机制,mvcc D持久性:redo log   隔离机制    级别 脏读 不可重复读 幻读    读未提交 o o o   读提交 x o o   可重复读 x x o   序列化 x x x   数据读取问题  脏读:读取未提交事务修改过的数据 不可重复读:前后多次读取">
 <meta property="article:published_time" content="2020-08-25T12:01:53.000Z">
-<meta property="article:modified_time" content="2020-08-25T12:01:53.289Z">
+<meta property="article:modified_time" content="2020-08-27T02:02:24.827Z">
 <meta property="article:author" content="iakwal">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/08/25/mysql/">
+<link rel="canonical" href="http://yoursite.com/2020/08/25/database/">
 
 
 <script id="page-configurations">
@@ -67,7 +69,7 @@
   };
 </script>
 
-  <title>mysql | PSR B1919+21</title>
+  <title>database | PSR B1919+21</title>
   
 
 
@@ -166,7 +168,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/25/mysql/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/25/database/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/sora1.jpeg">
@@ -179,7 +181,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          mysql
+          database
         </h1>
 
         <div class="post-meta">
@@ -191,6 +193,13 @@
 
               <time title="Created: 2020-08-25 20:01:53" itemprop="dateCreated datePublished" datetime="2020-08-25T20:01:53+08:00">2020-08-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-27 10:02:24" itemprop="dateModified" datetime="2020-08-27T10:02:24+08:00">2020-08-27</time>
+              </span>
 
           
 
@@ -203,7 +212,128 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="MYSQL"><a href="#MYSQL" class="headerlink" title="MYSQL"></a>MYSQL</h1><p><strong>innodb引擎</strong></p>
+<ul>
+<li><p>提供事物ACID</p>
+<ul>
+<li>A原子性:undo log</li>
+<li>C一致性:保证状态转移有效    </li>
+<li>I隔离性:锁机制,mvcc</li>
+<li>D持久性:redo log</li>
+</ul>
+</li>
+<li><p>隔离机制</p>
+<table>
+<thead>
+<tr>
+<th align="center">级别</th>
+<th align="center">脏读</th>
+<th align="center">不可重复读</th>
+<th align="center">幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">读未提交</td>
+<td align="center">o</td>
+<td align="center">o</td>
+<td align="center">o</td>
+</tr>
+<tr>
+<td align="center">读提交</td>
+<td align="center">x</td>
+<td align="center">o</td>
+<td align="center">o</td>
+</tr>
+<tr>
+<td align="center">可重复读</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">o</td>
+</tr>
+<tr>
+<td align="center">序列化</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+</tr>
+</tbody></table>
+<p>数据读取问题</p>
+<ul>
+<li>脏读:读取未提交事务修改过的数据</li>
+<li>不可重复读:前后多次读取数据内容不一致</li>
+<li>幻读:前后多次读取数据总量不一致</li>
+</ul>
+<p>隔离级别</p>
+<ul>
+<li>读未提交:读取其他未提交事务的修改</li>
+<li>读提交:只能读取其他已提交事务的修改</li>
+<li>可重复读:事务不会读到其他事务对已有数据的修改</li>
+<li>序列化:事务顺序执行</li>
+</ul>
+<p>mvcc</p>
+<ul>
+<li>增加列:事务ID(递增),回滚段指针</li>
+<li>读提交实现:每个语句开始将所有活跃事物读入ReadView</li>
+<li>可重复读实现:每个事物开始将所有活跃事物读入ReadView</li>
+<li>记录最早最晚活跃事物ID并判断记录ID是否在范围内且在ReadView内</li>
+</ul>
+</li>
+</ul>
+<p><strong>MyISAM</strong></p>
+<p><strong>区别</strong></p>
+<ul>
+<li>不支持事务,外键,聚集索引,行级锁</li>
+<li>保存具体行数</li>
+</ul>
+<p><strong>优化</strong></p>
+<ul>
+<li>字段:避免NULL,使用枚举或整数代替字符串</li>
+<li>索引:不用外键,最好不用字符字段</li>
+<li>查询:慢查询日志分析,LIMIT分页</li>
+<li>读写分离:主增改删,从查</li>
+</ul>
+<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p><strong>数据类型</strong></p>
+<ul>
+<li>string<ul>
+<li>获取长度复杂度O(1)</li>
+<li>支持扩容</li>
+<li>空间预分配</li>
+<li>惰性空间释放</li>
+</ul>
+</li>
+<li>list<ul>
+<li>获取长度复杂度O(1)</li>
+<li>双端链表</li>
+<li>多态(复制,释放,对比判断)</li>
+</ul>
+</li>
+<li>hash<ul>
+<li>字典底层实现</li>
+<li>链地址法</li>
+<li>重新散列进行扩展和收缩</li>
+</ul>
+</li>
+<li>skiplist<ul>
+<li>随机层级索引</li>
+</ul>
+</li>
+</ul>
+<p><strong>持久化</strong></p>
+<ul>
+<li>RDB(Redis DataBase):默认,按照一定的时间将内存的数据以快照的形式保存到硬盘</li>
+<li>AOF(Append Only File):将Redis执行的每次写命令记录到单独的日志文件</li>
+</ul>
+<p><strong>事物</strong></p>
+<ul>
+<li>一次性，顺序性，排他性的执行一个队列中的一系列命令</li>
+<li>不支持回滚</li>
+</ul>
+<p><strong>mysql and redis</strong></p>
+<ul>
+<li>mysql:关系型数据库,持久化数据,硬盘存储</li>
+<li>redis:非关系型数据库,缓存(内存)存储</li>
+</ul>
+
     </div>
 
     
@@ -221,10 +351,7 @@
     <a href="/2020/08/25/cplusplus/" rel="prev" title="cplusplus">
       <i class="fa fa-chevron-left"></i> cplusplus
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/08/25/redis/" rel="next" title="redis">
-      redis <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -284,6 +411,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MYSQL"><span class="nav-number">1.</span> <span class="nav-text">MYSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis"><span class="nav-number">2.</span> <span class="nav-text">Redis</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -299,7 +427,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

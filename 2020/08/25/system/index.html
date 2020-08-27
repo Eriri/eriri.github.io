@@ -46,12 +46,14 @@
   };
 </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="内存管理进程线程区别  进程是资源分配的最小单位,线程是CPU调度的最小单位 进程间不会相互影响，一个线程挂掉将导致整个进程挂掉 不同进程间数据很难共享,同一进程下不同线程间数据很易共享  进程通信  匿名管道:半双工,单向流动,父子关系进程,字节流,大小限制 有名管道:允许无亲缘关系进程 消息队列:内核中消息队列的标识,链表,有格式的数据,大小限制,独立于发送和接收进程 信号量:计数器,控制多个">
+<meta property="og:type" content="article">
 <meta property="og:title" content="system">
 <meta property="og:url" content="http://yoursite.com/2020/08/25/system/index.html">
 <meta property="og:site_name" content="PSR B1919+21">
+<meta property="og:description" content="内存管理进程线程区别  进程是资源分配的最小单位,线程是CPU调度的最小单位 进程间不会相互影响，一个线程挂掉将导致整个进程挂掉 不同进程间数据很难共享,同一进程下不同线程间数据很易共享  进程通信  匿名管道:半双工,单向流动,父子关系进程,字节流,大小限制 有名管道:允许无亲缘关系进程 消息队列:内核中消息队列的标识,链表,有格式的数据,大小限制,独立于发送和接收进程 信号量:计数器,控制多个">
 <meta property="article:published_time" content="2020-08-25T12:00:54.000Z">
-<meta property="article:modified_time" content="2020-08-25T12:00:54.370Z">
+<meta property="article:modified_time" content="2020-08-27T02:28:51.085Z">
 <meta property="article:author" content="iakwal">
 <meta name="twitter:card" content="summary">
 
@@ -191,6 +193,13 @@
 
               <time title="Created: 2020-08-25 20:00:54" itemprop="dateCreated datePublished" datetime="2020-08-25T20:00:54+08:00">2020-08-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-27 10:28:51" itemprop="dateModified" datetime="2020-08-27T10:28:51+08:00">2020-08-27</time>
+              </span>
 
           
 
@@ -203,7 +212,65 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h1 id="进程线程"><a href="#进程线程" class="headerlink" title="进程线程"></a>进程线程</h1><p><strong>区别</strong></p>
+<ul>
+<li>进程是资源分配的最小单位,线程是CPU调度的最小单位</li>
+<li>进程间不会相互影响，一个线程挂掉将导致整个进程挂掉</li>
+<li>不同进程间数据很难共享,同一进程下不同线程间数据很易共享</li>
+</ul>
+<p><strong>进程通信</strong></p>
+<ul>
+<li>匿名管道:半双工,单向流动,父子关系进程,字节流,大小限制</li>
+<li>有名管道:允许无亲缘关系进程</li>
+<li>消息队列:内核中消息队列的标识,链表,有格式的数据,大小限制,独立于发送和接收进程</li>
+<li>信号量:计数器,控制多个进程对共享资源的访问,不同线程之间的同步</li>
+<li>共享内存:映射一段能被其他进程所访问的内存,配合信号量</li>
+<li>套接字:不同机器间的进程通信</li>
+<li>信号:可以在任何时候发送给某一进程,由内核保存</li>
+</ul>
+<p><strong>I/O多路复用</strong></p>
+<ul>
+<li>select<ul>
+<li>O(n)无差别轮询链表</li>
+<li>用户和内核空间传递数据结构</li>
+</ul>
+</li>
+<li>epoll<ul>
+<li>事件驱动:callback函数</li>
+<li>内核和用户空间共享内存</li>
+<li>红黑树维护socket</li>
+<li>链表存储就绪事件</li>
+<li>epoll_create创建一个epoll实例并返回相应的文件描述符</li>
+<li>epoll_ctl控制某个epoll文件描述符上的事件</li>
+<li>epoll_wait等待事件触发</li>
+<li>水平触发:缓冲内容非空读就绪,缓冲区还非满写就绪</li>
+<li>边缘触发:缓冲区空转非空读通知,缓冲区满转非满写通知</li>
+</ul>
+</li>
+</ul>
+<p><strong>切换特点</strong></p>
+<ul>
+<li>不同:进程切换涉及虚拟地址空间(需切换页目录)</li>
+<li>相同:都需要切换上下文(寄存器,计数器,用户栈|内核栈,内核数据结构)</li>
+</ul>
+<h1 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h1><p><strong>brk,sbrk</strong></p>
+<p><strong>mmap,munmap</strong></p>
+<h1 id="Linux命令"><a href="#Linux命令" class="headerlink" title="Linux命令"></a>Linux命令</h1><p><strong>top</strong></p>
+<ul>
+<li>pid:  进程id</li>
+<li>user: 所有者</li>
+<li>pr:   进程优先级</li>
+<li>ni:   nice值,负高正低</li>
+<li>virt: 虚拟内存总使用量(kb,swap+res)</li>
+<li>res:  未换出的物理内存大小(kb,code+data)</li>
+<li>shr:  共享内存大小</li>
+<li>状态:  D不可中断的睡眠状态 R运行 S睡眠 T跟踪/停止 Z僵尸进程</li>
+<li>%cpu: CPU时间占比</li>
+<li>%mem: 物理内存使用占比</li>
+<li>time+:    使用cpu总时间(0.01s)</li>
+<li>command:  进程名称命令</li>
+</ul>
+
     </div>
 
     
@@ -284,6 +351,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#内存管理"><span class="nav-number">1.</span> <span class="nav-text">内存管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程线程"><span class="nav-number">2.</span> <span class="nav-text">进程线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统调用"><span class="nav-number">3.</span> <span class="nav-text">系统调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux命令"><span class="nav-number">4.</span> <span class="nav-text">Linux命令</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -299,7 +367,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
